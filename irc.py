@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-import socket
+import socket, time
 
 def login_irc_freenode(nick):
     s = socket.create_connection(("irc.freenode.net", 6666))
@@ -14,6 +14,7 @@ def join_chatroom(s, chatroom):
 
 def send_message(s, chatroom, msg):
     s.send("PRIVMSG #" + chatroom + " :" + msg + "\r\n")
+    time.sleep(0.5)
 
 def ping(s):
     s.send("PING irc.freenode.net\r\n")

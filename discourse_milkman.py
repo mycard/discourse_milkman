@@ -105,11 +105,10 @@ if __name__ == "__main__":
             send_message(socket_irc, channel, "新主题：" + it[0].encode("utf-8") + "中，" + it[1].encode("utf-8") + "写道：")
             send_message(socket_irc, channel, it[2].encode("utf-8"))
             send_message(socket_irc, channel, dmm.view_url_topic(it[3]))
-            time.sleep(1)
         new_top = last_reply.get_top(BASE_URL)
         if new_top != -1:
             if new_top[1] != 1:
-                send_message(socket_irc, channel, "主题" + new_top[0].encode("utf-8") + "被顶了上来，目前有" + str(new_top[1]) + "个回复")
+                send_message(socket_irc, channel, "主题" + new_top[0].encode("utf-8") + "被回复了，目前有" + str(new_top[1]) + "个回复")
                 send_message(socket_irc, channel, dmm.view_url_topic(last_reply.top_id))
         time.sleep(2)
         i += 1
