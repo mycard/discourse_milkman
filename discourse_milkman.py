@@ -48,7 +48,7 @@ class DiscourseMilkman:
         self.get_top()
 
     def get_top(self):
-        top = json.load(urllib2.urlopen(URL_LATEST))["topic_list"]["topics"][0]
+        top = json.load(urllib2.urlopen(self.URL_LATEST))["topic_list"]["topics"][0]
         if self.top_id != top["id"]:
             self.top_id = top["id"]
             self.top_reply_nr = top["highest_post_number"]
@@ -130,12 +130,12 @@ if __name__ == "__main__":
             send_message(socket_irc, channel, "新主题：" + it[0].encode("utf-8") + "中，" + it[1].encode("utf-8") + "写道：")
             send_message(socket_irc, channel, it[2].encode("utf-8"))
             send_message(socket_irc, channel, dmm.view_url_topic(it[3]))
-        new_top = dmm.get_top(BASE_URL)
+        new_top = dmm.get_top()
         if new_top != -1:
             if new_top[1] != 1:
                 send_message(socket_irc, channel, "主题《" + new_top[0].encode("utf-8") + "》被回复了，目前有" + str(new_top[1]) + "个回复")
                 curr_last_reply = dmm.get_last_reply_author_and_text(dmm.top_id)
-                send_message(socket_irc, channel, curr_last_reply[1].encode("utf-8") + "写道：" + curr_last_reply[2].encode("utf-8"))
+                send_message(socket_irc, channel, curr_last_reply[0].encode("utf-8") + "写道：" + curr_last_reply[1].encode("utf-8"))
                 send_message(socket_irc, channel, dmm.view_url_topic(dmm.top_id, new_top[1]))
         time.sleep(2)
         i += 1
