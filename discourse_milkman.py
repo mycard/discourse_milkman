@@ -85,8 +85,11 @@ class DiscourseMilkman:
         r.add_header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0")
         return self.opener.open(r).read()
         
-    def url_topic(self, id):
-        return self.URL_T + str(id) + DOT_JSON
+    def url_topic(self, id, pointed_reply=0):
+        if pointed_reply == 0:
+            return self.URL_T + str(id) + DOT_JSON
+        else :
+            return self.URL_T + str(id) + "/" + str(pointed_reply) + DOT_JSON
 
     def get_topic_author_and_text(self, id):
         a = json.load(urllib2.urlopen(self.url_topic(id)))
@@ -96,8 +99,10 @@ class DiscourseMilkman:
 
     def get_last_reply_author_and_text(self, id):
         a = json.load(urllib2.urlopen(self.url_topic(id)))
-        return (a["post_stream"]["posts"][-1]["username"], \
-        strip_text(a["post_stream"]["posts"][-1]["cooked"]), id)
+        hpn = a["highest_post_number"]
+        if hpn >= len(a["post_stream"]["posts"]):
+            a = json.load(urllib2.urlopen(self.url_topic(id, hpn)))
+        return (a["post_stream"]["posts"][-1]["username"], strip_text(a["post_stream"]["posts"][-1]["cooked"]), id)
 
     def get_all_new(self):
         a = []
